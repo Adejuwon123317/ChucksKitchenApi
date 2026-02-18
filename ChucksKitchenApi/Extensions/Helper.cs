@@ -5,6 +5,7 @@ namespace ChucksKitchenApi.Extensions
 {
     public static class Extensions
     {
+        //extension method
         public static void AddToModelState(this ValidationResult result, ModelStateDictionary modelstate)
         {
             foreach (var error in result.Errors)

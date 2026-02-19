@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChucksKitchenApi.Migrations
 {
     [DbContext(typeof(ChucksDbContext))]
-    [Migration("20260215030110_initial")]
+    [Migration("20260218204508_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -26,11 +26,11 @@ namespace ChucksKitchenApi.Migrations
 
             modelBuilder.Entity("ChucksKitchenApi.Entity.Menu", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -50,10 +50,7 @@ namespace ChucksKitchenApi.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Menus");
                 });

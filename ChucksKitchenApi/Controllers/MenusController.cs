@@ -62,7 +62,8 @@ namespace ChucksKitchenApi.Controllers
                 Price = createDTO.Price,
                 Description = createDTO.Description,
                 ImageUrl = createDTO.ImageUrl,
-                IsAvailable = createDTO.IsAvailable
+                IsAvailable = createDTO.IsAvailable,
+                CategoryId = createDTO.CategoryId
             };
             _context.Menus.Add(menu);
             await _context.SaveChangesAsync();
@@ -112,7 +113,8 @@ namespace ChucksKitchenApi.Controllers
                 Price = putDTO.Price,
                 Description = putDTO.Description,
                 ImageUrl = putDTO.ImageUrl,
-                IsAvailable = putDTO.IsAvailable
+                IsAvailable = putDTO.IsAvailable,
+                CategoryId = putDTO.CategoryId
             };
             if(id != menu.Id)
             {

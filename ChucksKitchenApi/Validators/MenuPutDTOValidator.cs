@@ -26,6 +26,10 @@ namespace ChucksKitchenApi.Validators
                 .MaximumLength(300).WithMessage("maximum length of 300 characters")
                 .Must(uri => Uri
                 .IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("valid url is required");
+
+            RuleFor(x => x.CategoryId)
+                .GreaterThan(0)
+                .NotEmpty().WithMessage("CategoryId is required");
         }
     }
 }

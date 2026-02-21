@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ChucksKitchenApi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace ChucksKitchenApi.Controllers
@@ -28,6 +29,7 @@ namespace ChucksKitchenApi.Controllers
         }
         //Get:/api/Menus
         [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetMenus()
         {
             var menus = await _context.Menus.ToListAsync();
@@ -44,6 +46,7 @@ namespace ChucksKitchenApi.Controllers
         }
         //Post:/api/Menus
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateMenu(MenuCreateDTO createDTO)
         {
             // firstly we validate
@@ -72,6 +75,7 @@ namespace ChucksKitchenApi.Controllers
 
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetMenu(int id)
         {
             var menu = await _context.Menus.FindAsync(id);
@@ -82,6 +86,7 @@ namespace ChucksKitchenApi.Controllers
             return Ok(menu);
         }
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMenu(int id)
         {
             var menu = await _context.Menus.FindAsync(id);
@@ -95,6 +100,7 @@ namespace ChucksKitchenApi.Controllers
 
         }
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMenu(int id ,MenuPutDTO putDTO)
         {
             // firstly we validate

@@ -4,6 +4,7 @@ using ChucksKitchenApi.Entity;
 using ChucksKitchenApi.Extensions;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace ChucksKitchenApi.Controllers
         }
         //Get:/api/Categories
         [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetCategories()
         {
             var categories = await _context.Categories.Include(c => c.Menus).ToListAsync();
@@ -47,6 +49,7 @@ namespace ChucksKitchenApi.Controllers
         }
         //Get:/api/Category/{id}
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetCategory(int id)
         {
             var category = await _context.Categories
@@ -75,6 +78,7 @@ namespace ChucksKitchenApi.Controllers
 
         // Post:/api/Category
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCategory(CategoryCreateDTO createDTO)
         {
             // firstly we validate
@@ -100,6 +104,7 @@ namespace ChucksKitchenApi.Controllers
         }
         // Put:/api/Category/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCategory(int id, CategoryPutDTO putDTO)
         {
             // firstly we validate
@@ -140,6 +145,7 @@ namespace ChucksKitchenApi.Controllers
         }
         // Delete:/api/Category/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);

@@ -22,6 +22,7 @@ namespace ChucksKitchenApi.Controllers
         private readonly IValidator<CartItemCreateDTO> _createValidator;
         private readonly IValidator<CartItemPutDTO> _putValidator;
         public CartsController(ChucksDbContext context, UserManager<AppUser> userManager, IValidator<CartItemCreateDTO> createValidator, IValidator<CartItemPutDTO> putValidator)
+
         {
             _context = context;
             _userManager = userManager;

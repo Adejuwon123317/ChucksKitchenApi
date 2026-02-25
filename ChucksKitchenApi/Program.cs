@@ -1,6 +1,7 @@
 using ChucksKitchenApi.Data;
 using ChucksKitchenApi.Entity;
 using ChucksKitchenApi.Seed;
+using ChucksKitchenApi.Services;
 using ChucksKitchenApi.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -79,6 +80,7 @@ builder.Services.AddAuthentication(y =>
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 

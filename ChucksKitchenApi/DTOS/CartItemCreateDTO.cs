@@ -3,6 +3,6 @@
     public class CartItemCreateDTO
     {
         public int MenuId { get; set; }
-        public int Quantity { get; set; } = 1;
+        public int Quantity { get; set; } = 1; 
     }
 }

@@ -81,6 +81,8 @@ builder.Services.AddAuthentication(y =>
     };
 });
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddHttpClient<PaymentService>();
 
 var app = builder.Build();
 

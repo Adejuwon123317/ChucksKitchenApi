@@ -18,12 +18,12 @@ namespace ChucksKitchenApi.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreateOrder()
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDTO createOrderDTO)
         {
             try
             {
                 var appUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var result = await _orderService.CreateOrderAsync(appUserId);
+                var result = await _orderService.CreateOrderAsync(appUserId, createOrderDTO);
                 return Ok(result); 
             }
             catch (InvalidOperationException ex)

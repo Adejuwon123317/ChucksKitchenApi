@@ -12,5 +12,10 @@ namespace ChucksKitchenApi.Entity
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public decimal TotalAmount { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        // NEW
+        public OrderType OrderType { get; set; } = OrderType.Pickup;
+
+        public string? DeliveryAddress { get; set; }
     }
 }

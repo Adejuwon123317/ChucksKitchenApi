@@ -13,7 +13,7 @@ namespace ChucksKitchenApi.Services
         {
             _context = context;
         }
-        public async Task<OrderResponseDTO> CreateOrderAsync(string appUserId)
+        public async Task<OrderResponseDTO> CreateOrderAsync(string appUserId, CreateOrderDTO createOrderDTO)
         {
            var cart = await _context.Carts
                 .Include(c => c.CartItems)
@@ -28,6 +28,15 @@ namespace ChucksKitchenApi.Services
                 AppUserId = appUserId,
                 Status = OrderStatus.Pending,
             };
+            if (string.IsNullOrWhiteSpace(createOrderDTO.DeliveryAddress))
+            {
+                order.OrderType = OrderType.Pickup;
+            }
+            else
+            {
+                order.OrderType = OrderType.Delivery;
+                order.DeliveryAddress = createOrderDTO.DeliveryAddress;
+            }
             foreach (var item in cart.CartItems)
             {
                 var orderItem = new OrderItem
@@ -107,6 +116,9 @@ namespace ChucksKitchenApi.Services
                 CreatedAt = order.CreatedAt,
                 Status = order.Status.ToString(),
                 TotalAmount = order.TotalAmount,
+                OrderType = order.OrderType.ToString(),
+                DeliveryAddress = order.DeliveryAddress,
+
                 Items = order.OrderItems.Select(oi => new OrderItemDTO
                 {
                     MenuId = oi.MenuId,

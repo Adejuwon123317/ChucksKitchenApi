@@ -5,7 +5,7 @@ namespace ChucksKitchenApi.Services
 {
     public interface IOrderService
     {
-        Task<OrderResponseDTO> CreateOrderAsync(string appUserId);
+        Task<OrderResponseDTO> CreateOrderAsync(string appUserId,CreateOrderDTO createOrderDTO);
 
         Task<OrderResponseDTO?> GetOrderByIdAsync(int orderId, string appUserId, bool isAdmin);
 

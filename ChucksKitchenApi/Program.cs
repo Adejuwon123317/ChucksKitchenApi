@@ -118,18 +118,24 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    var db = services.GetRequiredService<ChucksDbContext>();
-
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-    // ensure DB is reachable first
-    await db.Database.MigrateAsync();
-
-    // seed only if roles table is empty
-    if (!await roleManager.Roles.AnyAsync())
+    try
     {
-        await IdentityRoleSeeder.SeedRolesAsync(services);
-        await IdentityUserSeeder.SeedAdminAsync(services);
+        var db = services.GetRequiredService<ChucksDbContext>();
+
+        // ensure DB exists (safe version)
+        await db.Database.MigrateAsync();
+
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        if (!await roleManager.Roles.AnyAsync())
+        {
+            await IdentityRoleSeeder.SeedRolesAsync(services);
+            await IdentityUserSeeder.SeedAdminAsync(services);
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Seeding error: {ex.Message}");
     }
 }
 

@@ -1,0 +1,28 @@
+# STEP 1: Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# copy everything
+COPY . .
+
+RUN dotnet restore ChucksKitchenApi.csproj
+
+RUN dotnet publish ChucksKitchenApi.csproj -c Release -o /app/publish
+
+# STEP 2: Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+
+# copy published files from build stage
+COPY --from=build /app/publish .
+
+	# expose port Render will use
+	EXPOSE 8080
+
+	# tell ASP.NET to listen on all IPs
+	ENV ASPNETCORE_URLS=http://+:8080
+
+	ENV ASPNETCORE_ENVIRONMENT=Production
+
+	# start your API
+	ENTRYPOINT ["dotnet", "ChucksKitchenApi.dll"]

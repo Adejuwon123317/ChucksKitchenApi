@@ -56,8 +56,15 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader());
+});
 
-builder.Services.AddDbContext<ChucksDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ChucksDbContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), npgsql => npgsql.EnableRetryOnFailure()));
 //builder.Services.AddDbContext<ChucksDbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services
     .AddIdentity<AppUser, IdentityRole>()
@@ -88,7 +95,7 @@ builder.Services.AddHttpClient<PaymentService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -97,13 +104,33 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseCors("AllowAll");
+
 app.MapControllers();
 
+//using (var scope = app.Services.CreateScope())
+//{
+//    await IdentityUserSeeder.SeedAdminAsync(scope.ServiceProvider);
+//    await IdentityRoleSeeder.SeedRolesAsync(scope.ServiceProvider);
+
+//}
 using (var scope = app.Services.CreateScope())
 {
-    await IdentityUserSeeder.SeedAdminAsync(scope.ServiceProvider);
-    await IdentityRoleSeeder.SeedRolesAsync(scope.ServiceProvider);
+    var services = scope.ServiceProvider;
 
+    var db = services.GetRequiredService<ChucksDbContext>();
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    // ensure DB is reachable first
+    await db.Database.MigrateAsync();
+
+    // seed only if roles table is empty
+    if (!await roleManager.Roles.AnyAsync())
+    {
+        await IdentityRoleSeeder.SeedRolesAsync(services);
+        await IdentityUserSeeder.SeedAdminAsync(services);
+    }
 }
 
 app.Run();

@@ -29,17 +29,18 @@ namespace ChucksKitchenApi.Controllers
         }
         //Get:/api/Menus
         [HttpGet]
-        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetMenus()
         {
             var menus = await _context.Menus.ToListAsync();
             var menuReadDtoList = menus.Select(x => new MenuReadDTO
             {
+                Id = x.Id,
                 Name = x.Name,
                 Price = x.Price,
                 Description = x.Description,
                 ImageUrl = x.ImageUrl,
-                IsAvailable = x.IsAvailable
+                IsAvailable = x.IsAvailable,
+                CategoryId = x.CategoryId
             })
             .ToList();
             return Ok(menuReadDtoList);
@@ -75,7 +76,6 @@ namespace ChucksKitchenApi.Controllers
 
         }
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetMenu(int id)
         {
             var menu = await _context.Menus.FindAsync(id);

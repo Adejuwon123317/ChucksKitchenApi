@@ -27,16 +27,17 @@ namespace ChucksKitchenApi.Controllers
         }
         //Get:/api/Categories
         [HttpGet]
-        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetCategories()
         {
             var categories = await _context.Categories.Include(c => c.Menus).ToListAsync();
             var categoryReadDtoList = categories.Select(x => new CategoryReadDTO
             {
+                Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
                 Menus = x.Menus.Select(m => new MenuReadDTO
                 {
+                    Id = m.Id,
                     Name = m.Name,
                     Price = m.Price,
                     Description = m.Description,
@@ -49,7 +50,6 @@ namespace ChucksKitchenApi.Controllers
         }
         //Get:/api/Category/{id}
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetCategory(int id)
         {
             var category = await _context.Categories
@@ -65,6 +65,7 @@ namespace ChucksKitchenApi.Controllers
                 Description = category.Description,
                 Menus = category.Menus.Select(m => new MenuReadDTO
                 {
+                    Id = m.Id,
                     Name = m.Name,
                     Price = m.Price,
                     Description = m.Description,

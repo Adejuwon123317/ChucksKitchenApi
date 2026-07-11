@@ -10,6 +10,7 @@ namespace ChucksKitchenApi.Services
         Task<OrderResponseDTO?> GetOrderByIdAsync(int orderId, string appUserId, bool isAdmin);
 
         Task<IEnumerable<OrderResponseDTO>> GetUserOrdersAsync(string appUserId);
+        Task<IEnumerable<OrderResponseDTO>> GetAllOrdersAsync();
 
         Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus status);
 

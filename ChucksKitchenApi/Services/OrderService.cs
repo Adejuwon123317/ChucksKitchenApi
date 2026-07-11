@@ -107,6 +107,7 @@ namespace ChucksKitchenApi.Services
         {
             var order = await _context.Orders
                 .Include(o => o.OrderItems)
+                .Include(o => o.AppUser)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
             if (order == null)
                 throw new Exception("Order not found.");
@@ -118,6 +119,8 @@ namespace ChucksKitchenApi.Services
                 TotalAmount = order.TotalAmount,
                 OrderType = order.OrderType.ToString(),
                 DeliveryAddress = order.DeliveryAddress,
+                CustomerName = $"{order.AppUser?.FirstName} {order.AppUser?.LastName}".Trim(),
+                CustomerEmail = order.AppUser?.Email ?? string.Empty,
 
                 Items = order.OrderItems.Select(oi => new OrderItemDTO
                 {
@@ -128,6 +131,17 @@ namespace ChucksKitchenApi.Services
                     TotalPrice = oi.TotalPrice
                 }).ToList()
             };
+        }
+        public async Task<IEnumerable<OrderResponseDTO>> GetAllOrdersAsync()
+        {
+            var orderIds = await _context.Orders.Select(o => o.Id).ToListAsync();
+            var result = new List<OrderResponseDTO>();
+            foreach (var id in orderIds)
+            {
+                var orderDTO = await MapOrder(id);
+                result.Add(orderDTO);
+            }
+            return result;
         }
     }
 }

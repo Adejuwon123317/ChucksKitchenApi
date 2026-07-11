@@ -8,5 +8,6 @@ namespace ChucksKitchenApi.Entity
         public string LastName { get; set; } = string.Empty;
         public string Nationality { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
+        public DateTime? LastLoginAt { get; set; }
     }
 }

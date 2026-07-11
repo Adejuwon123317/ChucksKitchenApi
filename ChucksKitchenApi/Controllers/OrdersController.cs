@@ -67,5 +67,12 @@ namespace ChucksKitchenApi.Controllers
             if (!canceled) return NotFound();
             return Ok("Order canceled.");
         }
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var result = await _orderService.GetAllOrdersAsync();
+            return Ok(result);
+        }
     }
 }

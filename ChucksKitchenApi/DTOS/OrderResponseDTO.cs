@@ -14,5 +14,7 @@
         public string? DeliveryAddress { get; set; }
 
         public List<OrderItemDTO> Items { get; set; } = new();
+        public string CustomerName { get; set; } = string.Empty;
+        public string CustomerEmail { get; set; } = string.Empty;
     }
 }

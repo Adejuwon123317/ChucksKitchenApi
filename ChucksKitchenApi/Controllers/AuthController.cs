@@ -34,6 +34,8 @@ namespace ChucksKitchenApi.Controllers
             {
                 return Unauthorized("Invalid email or password");
             }
+            user.LastLoginAt = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
             //claims are pieces of ones unique identity like nin and bvn
             var claims = new List<Claim>

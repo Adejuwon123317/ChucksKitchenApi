@@ -1,12 +1,13 @@
 ﻿using ChucksKitchenApi.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 namespace ChucksKitchenApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
@@ -14,7 +15,6 @@ namespace ChucksKitchenApi.Controllers
         {
             _userManager = userManager;
         }
-
         [HttpGet]
         public IActionResult GetAllUsers()
         {
@@ -28,7 +28,6 @@ namespace ChucksKitchenApi.Controllers
                 u.Gender,
                 u.LastLoginAt
             }).ToList();
-
             return Ok(new
             {
                 totalUsers = users.Count,

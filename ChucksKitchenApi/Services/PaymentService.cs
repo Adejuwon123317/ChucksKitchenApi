@@ -51,7 +51,7 @@ namespace ChucksKitchenApi.Services
                 email = order.AppUser!.Email,
                 amount = (int)(order.TotalAmount * 100),
                 reference = reference,
-                callback_url = "http://localhost:8080/payment-callback"
+                callback_url = "https://chuks-kitchen.jwebng.workers.dev"
             };
 
             var json = System.Text.Json.JsonSerializer.Serialize(requestPayload);

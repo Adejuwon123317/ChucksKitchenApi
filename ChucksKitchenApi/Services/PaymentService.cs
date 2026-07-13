@@ -46,12 +46,13 @@ namespace ChucksKitchenApi.Services
 
             var secretKey = _config["Paystack:SecretKey"];
 
+            var frontendBaseUrl = _config["Frontend:BaseUrl"];
             var requestPayload = new
             {
                 email = order.AppUser!.Email,
                 amount = (int)(order.TotalAmount * 100),
                 reference = reference,
-                callback_url = "https://chuks-kitchen.jwebng.workers.dev"
+                callback_url = $"{frontendBaseUrl}/payment-callback"
             };
 
             var json = System.Text.Json.JsonSerializer.Serialize(requestPayload);
